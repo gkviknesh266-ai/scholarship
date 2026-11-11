@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink — Organ Donator & Finder Portal | Mini-Project</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        medical: {
+                            teal: '#0f4c5c',
+                            tealLight: '#0d9488',
+                            crimson: '#e11d48',
+                            crimsonDark: '#be123c',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        .hero-pattern {
+            background-color: #0f4c5c;
+            background-image: radial-gradient(circle at 20% 20%, rgba(13, 148, 136, 0.35) 0%, transparent 50%),
+                              radial-gradient(circle at 80% 80%, rgba(225, 29, 72, 0.25) 0%, transparent 50%);
+        }
+        .pulse-badge {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.45; }
+        }
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px -6px rgba(15, 76, 92, 0.12);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-teal-600 selection:text-white">
+
+    <!-- Top Emergency Helpline & Mini-Project Banner -->
+    <div class="bg-slate-900 text-slate-200 text-xs py-2 px-4 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-600 text-white">
+                    <i class="fa-solid fa-heart-pulse mr-1"></i> LIVE PORTAL
+                </span>
+                <span class="font-medium text-slate-300">Topic 5: Organ Donator &amp; Finder Website</span>
+                <span class="hidden md:inline text-slate-500">|</span>
+                <span class="hidden md:inline text-teal-400 font-medium">RMK Engineering College • ECE-ACT Mini-Project</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-slate-400"><i class="fa-solid fa-shield-halved text-teal-400 mr-1"></i>THOA Compliant Nodal Registry</span>
+                <span class="font-semibold text-rose-400"><i class="fa-solid fa-phone-volume mr-1"></i>24x7 Transplant Helpline: 1800-103-7100</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Brand Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-medical-teal to-teal-600 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                        <i class="fa-solid fa-hand-holding-medical text-lg"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="font-extrabold text-xl tracking-tight text-medical-teal">Life<span class="text-medical-crimson">Link</span></span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200">India</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 leading-none">Organ Donator &amp; Finder Network</p>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+                    <a href="#finder-section" class="hover:text-medical-teal transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-magnifying-glass-location text-teal-600"></i> Organ Finder
+                    </a>
+                    <a href="#urgent-section" class="hover:text-medical-crimson transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-truck-medical text-rose-600"></i> Urgent Requests
+                        <span id="nav-urgent-badge" class="px-1.5 py-0.2 bg-rose-100 text-rose-700 rounded-full text-xs font-bold">5</span>
+                    </a>
+                    <a href="#compatibility-section" class="hover:text-medical-teal transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-vial-circle-check text-teal-600"></i> ABO Chart
+                    </a>
+                    <a href="#register-section" class="hover:text-medical-teal transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-signature text-teal-600"></i> Pledge Organ
+                    </a>
+                </nav>
+
+                <!-- Quick CTA Buttons -->
+                <div class="hidden sm:flex items-center gap-2.5">
+                    <a href="#finder-section" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-medical-teal bg-teal-50 hover:bg-teal-100 border border-teal-200 transition">
+                        <i class="fa-solid fa-magnifying-glass mr-1"></i> Find Organ
+                    </a>
+                    <a href="#register-section" class="px-4 py-2 rounded-lg text-xs font-semibold text-white bg-medical-crimson hover:bg-medical-crimsonDark shadow-sm transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-heart-circle-plus"></i> Register as Donor
+                    </a>
+                </div>
+
+                <!-- Mobile Hamburger Button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-none" aria-label="Open Menu">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
+            <a href="#finder-section" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-teal-50">
+                <i class="fa-solid fa-magnifying-glass-location text-teal-600 w-5"></i> Interactive Organ Finder
+            </a>
+            <a href="#urgent-section" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-rose-50">
+                <i class="fa-solid fa-truck-medical text-rose-600 w-5"></i> Urgent Recipient Requests
+            </a>
+            <a href="#compatibility-section" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-teal-50">
+                <i class="fa-solid fa-vial-circle-check text-teal-600 w-5"></i> Blood Compatibility Chart
+            </a>
+            <a href="#register-section" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-teal-50">
+                <i class="fa-solid fa-file-signature text-teal-600 w-5"></i> Donor Registration Form
+            </a>
+            <div class="pt-2 flex gap-2">
+                <a href="#finder-section" class="w-1/2 text-center py-2 rounded-lg text-xs font-semibold text-medical-teal bg-teal-50 border border-teal-200">Find Organ</a>
+                <a href="#register-section" class="w-1/2 text-center py-2 rounded-lg text-xs font-semibold text-white bg-medical-crimson">Pledge Now</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section with Live Statistics -->
+    <section class="hero-pattern text-white py-12 lg:py-16 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-8 items-center">
+                <!-- Left Column: Hero Copy & Quick Actions -->
+                <div class="lg:col-span-7 space-y-5">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-900/70 border border-teal-400/30 text-teal-200 text-xs font-medium">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-badge"></span>
+                        Real-Time Histocompatibility &amp; ABO Matching Engine
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+                        Bridge the Gap Between <span class="text-teal-300 underline decoration-rose-500 decoration-4 underline-offset-4">Life-Saving Donors</span> &amp; Critical Patients.
+                    </h1>
+                    <p class="text-slate-200 text-sm sm:text-base max-w-2xl leading-relaxed">
+                        Every organ pledge can save up to <strong>8 lives</strong> and enhance 50 more through tissue restoration. Search verified living and deceased-pledge organ donors across accredited Indian transplant hospitals or register your pledge in under 60 seconds.
+                    </p>
+
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <a href="#finder-section" class="px-6 py-3.5 rounded-xl font-bold text-sm bg-white text-medical-teal hover:bg-teal-50 shadow-lg transition flex items-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass-plus text-teal-600"></i>
+                            Find an Organ Now
+                        </a>
+                        <a href="#register-section" class="px-6 py-3.5 rounded-xl font-bold text-sm bg-medical-crimson hover:bg-medical-crimsonDark text-white shadow-lg transition flex items-center gap-2">
+                            <i class="fa-solid fa-hand-holding-heart"></i>
+                            Register as Donor
+                        </a>
+                        <button onclick="openDemoPledgeModal()" class="px-4 py-3.5 rounded-xl font-semibold text-xs bg-teal-800/70 hover:bg-teal-800 text-teal-100 border border-teal-500/40 transition flex items-center gap-2">
+                            <i class="fa-solid fa-id-card"></i> View Sample Donor Card
+                        </button>
+                    </div>
+
+                    <!-- Trust Strip -->
+                    <div class="pt-3 flex flex-wrap items-center gap-5 text-xs text-teal-200/90">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-400"></i> 100% Hospital Nodal Verified</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-lock text-emerald-400"></i> Contact Masking Privacy</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-bolt text-amber-300"></i> Smart ABO/Rh Compatibility</span>
+                    </div>
+                </div>
+
+                <!-- Right Column: Live Dashboard Statistics Cards -->
+                <div class="lg:col-span-5">
+                    <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-5 shadow-2xl">
+                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/15">
+                            <div>
+                                <h2 class="text-sm font-bold uppercase tracking-wider text-teal-200">Live Registry Telemetry</h2>
+                                <p class="text-xs text-slate-300">Updated dynamically as donors &amp; matches register</p>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Online
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3.5">
+                            <!-- Stat 1: Total Registered Donors -->
+                            <div class="bg-slate-900/50 border border-white/10 rounded-xl p-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-medium text-slate-300">Registered Donors</span>
+                                    <span class="w-8 h-8 rounded-lg bg-teal-500/20 text-teal-300 flex items-center justify-center">
+                                        <i class="fa-solid fa-users"></i>
+                                    </span>
+                                </div>
+                                <div class="mt-2 flex items-baseline gap-2">
+                                    <span id="stat-total-donors" class="text-2xl sm:text-3xl font-extrabold text-white">10</span>
+                                    <span class="text-[11px] text-emerald-400 font-semibold">Active Pool</span>
+                                </div>
+                                <p class="text-[11px] text-slate-400 mt-1">Verified living &amp; pledge cards</p>
+                            </div>
+
+                            <!-- Stat 2: Organs Matched -->
+                            <div class="bg-slate-900/50 border border-white/10 rounded-xl p-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-medium text-slate-300">Organs Matched</span>
+                                    <span class="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-300 flex items-center justify-center">
+                                        <i class="fa-solid fa-heart-circle-check"></i>
+                                    </span>
+                                </div>
+                                <div class="mt-2 flex items-baseline gap-2">
+                                    <span id="stat-organs-matched" class="text-2xl sm:text-3xl font-extrabold text-white">142</span>
+                                    <span class="text-[11px] text-rose-300 font-semibold">+Live Allocation</span>
+                                </div>
+                                <p class="text-[11px] text-slate-400 mt-1">Successful hospital handoffs</p>
+                            </div>
+
+                            <!-- Stat 3: Active Recipients -->
+                            <div class="bg-slate-900/50 border border-white/10 rounded-xl p-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-medium text-slate-300">Urgent Recipients</span>
+                                    <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center">
+                                        <i class="fa-solid fa-bed-pulse"></i>
+                                    </span>
+                                </div>
+                                <div class="mt-2 flex items-baseline gap-2">
+                                    <span id="stat-active-recipients" class="text-2xl sm:text-3xl font-extrabold text-white">5</span>
+                                    <span class="text-[11px] text-amber-300 font-semibold">Priority Queue</span>
+                                </div>
+                                <p class="text-[11px] text-slate-400 mt-1">Awaiting compatible cross-match</p>
+                            </div>
+
+                            <!-- Stat 4: Partner Hospitals -->
+                            <div class="bg-slate-900/50 border border-white/10 rounded-xl p-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-medium text-slate-300">Partner Hospitals</span>
+                                    <span class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-300 flex items-center justify-center">
+                                        <i class="fa-solid fa-hospital"></i>
+                                    </span>
+                                </div>
+                                <div class="mt-2 flex items-baseline gap-2">
+                                    <span id="stat-partner-hospitals" class="text-2xl sm:text-3xl font-extrabold text-white">28</span>
+                                    <span class="text-[11px] text-sky-300 font-semibold">7 Metro Hubs</span>
+                                </div>
+                                <p class="text-[11px] text-slate-400 mt-1">TRANSTAN &amp; NOTTO linked</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 1: INTERACTIVE ORGAN FINDER & COMPATIBILITY MATCHER -->
+    <section id="finder-section" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-6 gap-4">
+            <div>
+                <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md border border-teal-200 mb-2">
+                    <i class="fa-solid fa-sliders"></i> Module 01 • Interactive Search Engine
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Organ Finder &amp; Smart Compatibility Matcher</h2>
+                <p class="text-sm text-slate-600 mt-1">Filter verified donors by required organ, recipient blood group, city proximity, or donor availability status.</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="resetFinderFilters()" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-600 bg-white border border-slate-300 hover:bg-slate-50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-rotate-left"></i> Reset Filters
+                </button>
+            </div>
+        </div>
+
+        <!-- Search & Filter Control Panel -->
+        <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-5 mb-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- Filter 1: Organ Type -->
+                <div>
+                    <label for="filter-organ" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                        <i class="fa-solid fa-lungs text-teal-600 mr-1"></i> Required Organ
+                    </label>
+                    <select id="filter-organ" onchange="renderDonorCards()" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white">
+                        <option value="ALL">All Organs (7 Types)</option>
+                        <option value="Kidney">Kidney (Renal)</option>
+                        <option value="Liver">Liver (Hepatic Lobe)</option>
+                        <option value="Heart">Heart (Cardiac)</option>
+                        <option value="Lungs">Lungs (Pulmonary)</option>
+                        <option value="Pancreas">Pancreas</option>
+                        <option value="Cornea">Cornea (Eye)</option>
+                        <option value="Bone Marrow">Bone Marrow (Stem Cell)</option>
+                    </select>
+                </div>
+
+                <!-- Filter 2: Patient / Recipient Blood Group -->
+                <div>
+                    <label for="filter-blood" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                        <i class="fa-solid fa-droplet text-rose-600 mr-1"></i> Recipient Blood Group
+                    </label>
+                    <select id="filter-blood" onchange="renderDonorCards()" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white">
+                        <option value="ALL">Any Blood Group</option>
+                        <option value="A+">A Positive (A+)</option>
+                        <option value="A-">A Negative (A-)</option>
+                        <option value="B+">B Positive (B+)</option>
+                        <option value="B-">B Negative (B-)</option>
+                        <option value="AB+">AB Positive (AB+ Universal Rec.)</option>
+                        <option value="AB-">AB Negative (AB-)</option>
+                        <option value="O+">O Positive (O+)</option>
+                        <option value="O-">O Negative (O-)</option>
+                    </select>
+                </div>
+
+                <!-- Filter 3: City / Location -->
+                <div>
+                    <label for="filter-city" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                        <i class="fa-solid fa-location-dot text-teal-600 mr-1"></i> Location / Hub City
+                    </label>
+                    <select id="filter-city" onchange="renderDonorCards()" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white">
+                        <option value="ALL">All Indian Cities</option>
+                        <option value="Chennai">Chennai (TN)</option>
+                        <option value="Coimbatore">Coimbatore (TN)</option>
+                        <option value="Madurai">Madurai (TN)</option>
+                        <option value="Bengaluru">Bengaluru (KA)</option>
+                        <option value="Hyderabad">Hyderabad (TS)</option>
+                        <option value="Mumbai">Mumbai (MH)</option>
+                        <option value="Delhi">Delhi NCR</option>
+                    </select>
+                </div>
+
+                <!-- Filter 4: Availability / Urgency Readiness -->
+                <div>
+                    <label for="filter-urgency" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                        <i class="fa-solid fa-clock-rotate-left text-amber-600 mr-1"></i> Donor Readiness
+                    </label>
+                    <select id="filter-urgency" onchange="renderDonorCards()" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white">
+                        <option value="ALL">All Availability Types</option>
+                        <option value="Immediate (ICU / Ready)">Immediate (ICU / Ready)</option>
+                        <option value="Living Donor (Scheduled)">Living Donor (Scheduled)</option>
+                        <option value="Registered Pledge">Registered Pledge Card</option>
+                    </select>
+                </div>
+
+                <!-- Filter 5: Keyword Search -->
+                <div>
+                    <label for="filter-search" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                        <i class="fa-solid fa-magnifying-glass text-slate-500 mr-1"></i> Donor ID / Hospital
+                    </label>
+                    <input id="filter-search" type="text" oninput="renderDonorCards()" placeholder="e.g. Apollo, DNR-104..." class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white">
+                </div>
+            </div>
+
+            <!-- Smart ABO/Rh Compatibility Mode Toggle Bar -->
+            <div class="mt-4 pt-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="smart-compatibility-toggle" class="sr-only peer" checked onchange="renderDonorCards()">
+                        <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+                    </label>
+                    <div>
+                        <span class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                            Smart ABO/Rh Medical Compatibility Mode
+                            <span class="px-2 py-0.5 text-[10px] rounded bg-teal-100 text-teal-800 font-semibold">RECOMMENDED</span>
+                        </span>
+                        <p id="compatibility-helper-text" class="text-xs text-slate-500">
+                            When enabled, selecting a Recipient Blood Group automatically displays all medically compatible donor blood types (e.g., O- universal donors).
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 self-start sm:self-center">
+                    <span id="results-count-badge" class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-bold border border-slate-200">
+                        Showing 10 Verified Donors
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic Donor Directory Grid -->
+        <div id="donor-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Populated via JavaScript -->
+        </div>
+
+        <!-- Empty State (Hidden by default) -->
+        <div id="donor-empty-state" class="hidden bg-white rounded-2xl border border-dashed border-slate-300 p-10 text-center">
+            <div class="w-14 h-14 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3 text-2xl">
+                <i class="fa-solid fa-heart-crack"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800">No Matching Donors Found for Current Filter Criteria</h3>
+            <p class="text-sm text-slate-500 max-w-md mx-auto mt-1">
+                Try enabling <strong>Smart ABO/Rh Medical Compatibility Mode</strong> above, expanding your city search to all hubs, or resetting the filters.
+            </p>
+            <button onclick="resetFinderFilters()" class="mt-4 px-4 py-2 rounded-xl text-xs font-bold bg-medical-teal text-white hover:bg-teal-800 transition">
+                Show All Available Donors
+            </button>
+        </div>
+    </section>
+
+    <!-- SECTION 2: URGENT RECIPIENT REQUESTS BOARD -->
+    <section id="urgent-section" class="py-12 bg-slate-100/80 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-6 gap-4">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-rose-700 bg-rose-100 px-2.5 py-1 rounded-md border border-rose-200 mb-2">
+                        <span class="w-2 h-2 rounded-full bg-rose-600 animate-ping"></span> Module 02 • Hospital Emergency Waitlist
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Urgent Recipient Requests Board</h2>
+                    <p class="text-sm text-slate-600 mt-1">Verified critical and high-priority patients currently admitted at partner transplant centers awaiting compatible organs.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 text-xs">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 font-semibold border border-rose-200">
+                        <span class="w-2 h-2 rounded-full bg-rose-600"></span> Critical (ICU)
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 font-semibold border border-amber-200">
+                        <span class="w-2 h-2 rounded-full bg-amber-500"></span> High Priority
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sky-100 text-sky-800 font-semibold border border-sky-200">
+                        <span class="w-2 h-2 rounded-full bg-sky-500"></span> Moderate Waitlist
+                    </span>
+                </div>
+            </div>
+
+            <!-- Urgent Recipient Cards Grid -->
+            <div id="urgent-requests-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Populated via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: INTERACTIVE BLOOD & ORGAN COMPATIBILITY REFERENCE CHART -->
+    <section id="compatibility-section" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
+            <!-- Left Column: Interactive Blood Type Explorer -->
+            <div class="lg:col-span-5 bg-white rounded-2xl shadow-md border border-slate-200 p-6">
+                <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md border border-teal-200 mb-2">
+                    <i class="fa-solid fa-DNA"></i> Module 03 • Clinical Reference
+                </div>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Interactive ABO &amp; Rh Compatibility Simulator</h2>
+                <p class="text-xs sm:text-sm text-slate-600 mt-1 mb-4">
+                    Select any blood group below to inspect who they can <strong>donate organs/tissue to</strong> and who they can <strong>receive from</strong> during transplant cross-matching.
+                </p>
+
+                <!-- 8 Blood Group Selector Buttons -->
+                <div class="grid grid-cols-4 gap-2.5 mb-5" id="abo-selector-buttons">
+                    <button onclick="selectBloodChart('O-')" data-bg="O-" class="abo-btn py-2.5 rounded-xl font-extrabold text-sm border-2 transition bg-medical-teal text-white border-medical-teal shadow-sm">O-</button>
+                    <button onclick="selectBloodChart('O+')" data-bg="O+" class="abo-btn py-2.5 rounded-xl font-extrabold text-sm border-2 transition bg-slate-50 text-slate-700 border-slate-200 hover:border-teal-500">O+</button>
+                    <button onclick="selectBloodChart('A-')" data-bg="A-" class="abo-btn py-2.5 rounded-xl font-extrabold text-sm border-2 transition bg-slate-50 text-slate-700 border-slate-200 hover:border-teal-500">A-</button>
+                    <button onclick="selectBloodChart('A+')" data-bg="A+" class="abo-btn py-2.5 rounded-xl font-extrabold text-sm border-2 transition bg-slate-50 text-slate-700 border-slate-200 hover:border-teal-500">A+</button>
+                    <button onclick="selectBloodChart('B-')" data-bg="B-" class="abo-btn py-2.5 rounded-xl font-extrabold text-sm border-2 transition bg-slate-50 text-slate-700 border-slate-200 hover:border-teal-500">B-</button>
+                    <button onclick="selectBloodChart('B+')" data-bg="B+" class="abo-btn py-2.5 rounded-xl font-extrabold text-sm border-2 transition bg-slate-50 text-slate-700 border-slate-200 hover:border-teal-500">B+</button>
+                    <button onclick="selectBloodChart('AB-')" data-bg="AB-" class="abo-btn py-2.5 rounded-xl font-extrabold text-sm border-2 transition bg-slate-50 text-slate-700 border-slate-200 hover:border-teal-500">AB-</button>
+                    <button onclick="selectBloodChart('AB+')" data-bg="AB+" class="abo-btn py-2.5 rounded-xl font-extrabold text-sm border-2 transition bg-slate-50 text-slate-700 border-slate-200 hover:border-teal-500">AB+</button>
+                </div>
+
+                <!-- Dynamic Output Card -->
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-200 pb-2.5">
+                        <div>
+                            <span class="text-xs font-bold uppercase text-slate-400">Selected Blood Type</span>
+                            <h3 id="abo-selected-title" class="text-lg font-extrabold text-medical-teal">O Negative (O-) • Universal Donor</h3>
+                        </div>
+                        <span id="abo-selected-badge" class="w-11 h-11 rounded-xl bg-rose-600 text-white font-extrabold text-base flex items-center justify-center shadow">O-</span>
+                    </div>
+
+                    <div>
+                        <span class="text-xs font-bold text-slate-600 block mb-1.5">
+                            <i class="fa-solid fa-share-from-square text-teal-600 mr-1"></i> Can Donate Organ / Blood To:
+                        </span>
+                        <div id="abo-can-donate" class="flex flex-wrap gap-1.5">
+                            <!-- Filled via JS -->
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="text-xs font-bold text-slate-600 block mb-1.5">
+                            <i class="fa-solid fa-download text-rose-600 mr-1"></i> Can Receive Organ / Blood From:
+                        </span>
+                        <div id="abo-can-receive" class="flex flex-wrap gap-1.5">
+                            <!-- Filled via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cold Ischemia Viability Note -->
+                <div class="mt-4 p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900">
+                    <strong class="font-bold block mb-1"><i class="fa-solid fa-stopwatch mr-1"></i> Maximum Cold Ischemia Time (Viability Window):</strong>
+                    <div class="grid grid-cols-2 gap-1 text-[11px] text-amber-800">
+                        <span>• <strong>Heart / Lungs:</strong> 4 – 6 Hours</span>
+                        <span>• <strong>Liver / Pancreas:</strong> 8 – 12 Hours</span>
+                        <span>• <strong>Kidney:</strong> 24 – 36 Hours</span>
+                        <span>• <strong>Cornea:</strong> Up to 14 Days</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Full Compatibility Matrix Table -->
+            <div class="lg:col-span-7 bg-white rounded-2xl shadow-md border border-slate-200 p-6 overflow-hidden">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-extrabold text-slate-900">Complete ABO/Rh Transplant Compatibility Matrix</h3>
+                        <p class="text-xs text-slate-500">Note: Cornea and Bone Marrow transplants follow specialized HLA/tissue rules beyond standard ABO.</p>
+                    </div>
+                    <span class="hidden sm:inline-flex items-center gap-1 text-xs font-semibold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md border border-teal-200">
+                        <i class="fa-solid fa-check-double"></i> Medical Standard
+                    </span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-center border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-medical-teal text-white">
+                                <th class="p-2.5 text-left border border-teal-800 font-bold">Recipient ↓ \ Donor →</th>
+                                <th class="p-2.5 border border-teal-800 font-bold">O-</th>
+                                <th class="p-2.5 border border-teal-800 font-bold">O+</th>
+                                <th class="p-2.5 border border-teal-800 font-bold">A-</th>
+                                <th class="p-2.5 border border-teal-800 font-bold">A+</th>
+                                <th class="p-2.5 border border-teal-800 font-bold">B-</th>
+                                <th class="p-2.5 border border-teal-800 font-bold">B+</th>
+                                <th class="p-2.5 border border-teal-800 font-bold">AB-</th>
+                                <th class="p-2.5 border border-teal-800 font-bold">AB+</th>
+                            </tr>
+                        </thead>
+                        <tbody id="compatibility-matrix-tbody" class="divide-y divide-slate-200">
+                            <!-- Filled dynamically by JS for interactive highlighting -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 pt-3 border-t border-slate-100">
+                    <div class="flex items-center gap-4">
+                        <span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">✓</span> Compatible Match</span>
+                        <span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-slate-100 text-slate-300 flex items-center justify-center">—</span> Incompatible</span>
+                    </div>
+                    <span class="italic">Click any blood group on the left to highlight its row</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: DONOR REGISTRATION & PLEDGE FORM -->
+    <section id="register-section" class="py-12 bg-gradient-to-b from-slate-100 to-white border-t border-slate-200">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+                <!-- Form Banner Header -->
+                <div class="bg-medical-teal text-white p-6 sm:p-8 border-b-4 border-medical-crimson">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-teal-300 block mb-1">
+                                Module 04 • Official Donor Pledge Registry
+                            </span>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold">Register as an Organ Donator</h2>
+                            <p class="text-xs sm:text-sm text-teal-100 mt-1">
+                                Submitting this form immediately adds your verified profile to the live directory above and generates your Digital Donor Pledge Card.
+                            </p>
+                        </div>
+                        <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-2xl text-rose-400 shrink-0">
+                            <i class="fa-solid fa-file-medical"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registration Form Body -->
+                <form id="donor-registration-form" onsubmit="handleDonorRegistration(event)" class="p-6 sm:p-8 space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <!-- Full Name -->
+                        <div>
+                            <label for="reg-name" class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Full Legal Name <span class="text-rose-600">*</span></label>
+                            <input type="text" id="reg-name" required placeholder="e.g. Karthik Subramanian" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600">
+                        </div>
+
+                        <!-- Age (18-65) -->
+                        <div>
+                            <label for="reg-age" class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Age (18 – 65 Years) <span class="text-rose-600">*</span></label>
+                            <input type="number" id="reg-age" required min="18" max="65" placeholder="e.g. 28" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600">
+                        </div>
+
+                        <!-- Blood Group -->
+                        <div>
+                            <label for="reg-blood" class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Blood Group <span class="text-rose-600">*</span></label>
+                            <select id="reg-blood" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-teal-600">
+                                <option value="">Select Blood Group</option>
+                                <option value="O-">O Negative (O-)</option>
+                                <option value="O+">O Positive (O+)</option>
+                                <option value="A-">A Negative (A-)</option>
+                                <option value="A+">A Positive (A+)</option>
+                                <option value="B-">B Negative (B-)</option>
+                                <option value="B+">B Positive (B+)</option>
+                                <option value="AB-">AB Negative (AB-)</option>
+                                <option value="AB+">AB Positive (AB+)</option>
+                            </select>
+                        </div>
+
+                        <!-- City / Location -->
+                        <div>
+                            <label for="reg-city" class="block text-xs font-bold uppercase text-slate-700 mb-1.5">City / Transplant Hub <span class="text-rose-600">*</span></label>
+                            <select id="reg-city" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-teal-600">
+                                <option value="Chennai">Chennai</option>
+                                <option value="Coimbatore">Coimbatore</option>
+                                <option value="Madurai">Madurai</option>
+                                <option value="Bengaluru">Bengaluru</option>
+                                <option value="Hyderabad">Hyderabad</option>
+                                <option value="Mumbai">Mumbai</option>
+                                <option value="Delhi">Delhi</option>
+                            </select>
+                        </div>
+
+                        <!-- Preferred Partner Hospital -->
+                        <div>
+                            <label for="reg-hospital" class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Nodal Verification Hospital <span class="text-rose-600">*</span></label>
+                            <select id="reg-hospital" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-teal-600">
+                                <option value="Apollo Transplant Institute, Chennai">Apollo Transplant Institute, Chennai</option>
+                                <option value="MIOT International Hospital, Chennai">MIOT International Hospital, Chennai</option>
+                                <option value="PSG Hospitals, Coimbatore">PSG Hospitals, Coimbatore</option>
+                                <option value="Meenakshi Mission Hospital, Madurai">Meenakshi Mission Hospital, Madurai</option>
+                                <option value="Manipal Hospital, Bengaluru">Manipal Hospital, Bengaluru</option>
+                                <option value="Yashoda Hospitals, Hyderabad">Yashoda Hospitals, Hyderabad</option>
+                                <option value="Kokilaben Dhirubhai Ambani Hospital, Mumbai">Kokilaben Ambani Hospital, Mumbai</option>
+                                <option value="AIIMS Organ Retrieval Banking Org, Delhi">AIIMS ORBO, New Delhi</option>
+                            </select>
+                        </div>
+
+                        <!-- Emergency Contact / Next-of-Kin Phone -->
+                        <div>
+                            <label for="reg-phone" class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Contact &amp; Kin Mobile <span class="text-rose-600">*</span></label>
+                            <input type="tel" id="reg-phone" required placeholder="+91 98400 XXXXX" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600">
+                        </div>
+                    </div>
+
+                    <!-- Organs to Pledge (Checkboxes) -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-700 mb-2">
+                            Select Organs / Tissues to Pledge <span class="text-rose-600">*</span>
+                            <span class="font-normal text-slate-500 lowercase">(choose one or more; each selected organ creates a searchable listing)</span>
+                        </label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50/50 cursor-pointer text-xs font-semibold text-slate-700">
+                                <input type="checkbox" name="pledge-organ" value="Kidney" checked class="rounded text-teal-600 focus:ring-teal-500">
+                                <span>Kidney</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50/50 cursor-pointer text-xs font-semibold text-slate-700">
+                                <input type="checkbox" name="pledge-organ" value="Liver" class="rounded text-teal-600 focus:ring-teal-500">
+                                <span>Liver</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50/50 cursor-pointer text-xs font-semibold text-slate-700">
+                                <input type="checkbox" name="pledge-organ" value="Heart" class="rounded text-teal-600 focus:ring-teal-500">
+                                <span>Heart</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50/50 cursor-pointer text-xs font-semibold text-slate-700">
+                                <input type="checkbox" name="pledge-organ" value="Lungs" class="rounded text-teal-600 focus:ring-teal-500">
+                                <span>Lungs</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50/50 cursor-pointer text-xs font-semibold text-slate-700">
+                                <input type="checkbox" name="pledge-organ" value="Pancreas" class="rounded text-teal-600 focus:ring-teal-500">
+                                <span>Pancreas</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50/50 cursor-pointer text-xs font-semibold text-slate-700">
+                                <input type="checkbox" name="pledge-organ" value="Cornea" class="rounded text-teal-600 focus:ring-teal-500">
+                                <span>Cornea</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50/50 cursor-pointer text-xs font-semibold text-slate-700">
+                                <input type="checkbox" name="pledge-organ" value="Bone Marrow" class="rounded text-teal-600 focus:ring-teal-500">
+                                <span>Bone Marrow</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Donation Category & Medical History Declaration -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                        <div>
+                            <label for="reg-readiness" class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Donation Category / Readiness</label>
+                            <select id="reg-readiness" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-teal-600">
+                                <option value="Living Donor (Scheduled)">Living Donor (Kidney / Partial Liver / Marrow)</option>
+                                <option value="Registered Pledge">Registered Posthumous Multi-Organ Pledge</option>
+                                <option value="Immediate (ICU / Ready)">Immediate Hospital Nodal Availability</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="reg-notes" class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Medical Fitness / HLA Notes (Optional)</label>
+                            <input type="text" id="reg-notes" placeholder="e.g. Non-smoker, no diabetes/hypertension, family witness informed" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600">
+                        </div>
+                    </div>
+
+                    <!-- Mandatory Medical & Legal Consent Checkbox -->
+                    <div class="p-4 rounded-xl bg-teal-50/70 border border-teal-200 flex items-start gap-3">
+                        <input type="checkbox" id="reg-consent" required class="mt-1 rounded text-teal-600 focus:ring-teal-500">
+                        <label for="reg-consent" class="text-xs text-slate-700 leading-relaxed">
+                            <strong>Medical &amp; Ethical Declaration:</strong> I confirm that I am at least 18 years of age, free from active contraindicating infections (HIV, Hepatitis B/C, active malignancy), and voluntarily registering my pledge without any commercial consideration under the <em>Transplantation of Human Organs and Tissues Act (THOA)</em>. My next-of-kin has been informed of this pledge.
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+                        <p id="form-error-msg" class="text-xs font-bold text-rose-600 hidden"></p>
+                        <button type="submit" class="w-full sm:w-auto ml-auto px-8 py-3.5 rounded-xl font-extrabold text-sm bg-medical-crimson hover:bg-medical-crimsonDark text-white shadow-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-certificate"></i>
+                            Submit Donor Pledge &amp; Add to Live Directory
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-10 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-slate-800">
+                <div>
+                    <div class="flex items-center gap-2.5 text-white font-extrabold text-lg mb-2">
+                        <span class="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center text-sm"><i class="fa-solid fa-hand-holding-medical"></i></span>
+                        LifeLink Organ Donator &amp; Finder
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        A centralized web platform for voluntary organ pledging, automated ABO/Rh histocompatibility filtering, and hospital nodal coordination.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-200 mb-3">Mini-Project Academic Details</h4>
+                    <ul class="space-y-1.5 text-xs">
+                        <li><strong class="text-slate-300">Project Title:</strong> 5. Organ Donator and Finder Website</li>
+                        <li><strong class="text-slate-300">Submitted By:</strong> G.K. Viknesh (Reg No: 111726114051)</li>
+                        <li><strong class="text-slate-300">Department:</strong> ECE-ACT (Year 1) • Guide: Prof. Renugadevi</li>
+                        <li><strong class="text-slate-300">Institution:</strong> RMK Engineering College</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-200 mb-3">Ethical &amp; Legal Safeguards</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Direct donor-to-recipient personal phone numbers are masked in public views. All allocations require verification by a licensed Hospital Transplant Nodal Officer.
+                    </p>
+                </div>
+            </div>
+            <div class="pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-2">
+                <span>&copy; 2026 LifeLink Organ Donator &amp; Finder Portal — Academic Mini-Project Demonstration.</span>
+                <span>Built with HTML5, Tailwind CSS &amp; Vanilla JavaScript</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL 1: REQUEST MATCH / CONTACT HOSPITAL NODAL OFFICER -->
+    <div id="match-modal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden animate-fadeIn">
+            <div class="bg-medical-teal text-white px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-hospital-user text-teal-300 text-lg"></i>
+                    <h3 id="modal-title" class="font-extrabold text-base">Initiate Hospital Nodal Match Request</h3>
+                </div>
+                <button onclick="closeMatchModal()" class="text-teal-200 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <!-- Target Donor / Recipient Summary Box -->
+                <div id="modal-summary-box" class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs space-y-1.5">
+                    <!-- Dynamic details injected by JS -->
+                </div>
+
+                <form id="modal-request-form" onsubmit="submitMatchCoordination(event)" class="space-y-3.5">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Requesting Coordinator / Patient Name <span class="text-rose-600">*</span></label>
+                        <input type="text" id="coord-name" required placeholder="Dr. S. Ramesh / Patient Attendant Name" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Transplant Hospital Reg ID <span class="text-rose-600">*</span></label>
+                            <input type="text" id="coord-license" required placeholder="e.g. TN-TRANSTAN-8821" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Emergency Callback Phone <span class="text-rose-600">*</span></label>
+                            <input type="tel" id="coord-phone" required placeholder="+91 94440 XXXXX" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Clinical Cross-Match / Urgency Note</label>
+                        <textarea id="coord-notes" rows="2" placeholder="Specify patient UHID, PRA/HLA panel status, or ICU cold ischemia transport readiness..." class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600"></textarea>
+                    </div>
+
+                    <div class="pt-2 flex items-center justify-end gap-2.5">
+                        <button type="button" onclick="closeMatchModal()" class="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-medical-crimson hover:bg-medical-crimsonDark shadow-md flex items-center gap-1.5">
+                            <i class="fa-solid fa-paper-plane"></i> Dispatch Nodal Alert
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: DIGITAL DONOR PLEDGE CARD PREVIEW -->
+    <div id="pledge-card-modal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
+            <div class="bg-gradient-to-r from-medical-teal to-teal-700 text-white p-5 relative">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-teal-200 block">Official Verified Digital Card</span>
+                        <h3 class="text-lg font-extrabold">LifeLink Organ Donor Pledge</h3>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-extrabold text-sm shadow" id="card-blood">O+</span>
+                </div>
+            </div>
+
+            <div class="p-6 space-y-4 bg-slate-50">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2.5 text-xs">
+                    <div class="flex justify-between border-b border-slate-100 pb-2">
+                        <span class="text-slate-400 font-semibold">Donor ID:</span>
+                        <span id="card-id" class="font-mono font-bold text-teal-700">DNR-2026-111</span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-100 pb-2">
+                        <span class="text-slate-400 font-semibold">Donor Name &amp; Age:</span>
+                        <span id="card-name" class="font-bold text-slate-800">G.K. Viknesh (21 Yrs)</span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-100 pb-2">
+                        <span class="text-slate-400 font-semibold">Organs Pledged:</span>
+                        <span id="card-organs" class="font-bold text-rose-600 text-right">Kidney, Cornea</span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-100 pb-2">
+                        <span class="text-slate-400 font-semibold">City &amp; Nodal Hospital:</span>
+                        <span id="card-hospital" class="font-medium text-slate-700 text-right">Chennai • Apollo Transplant</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-400 font-semibold">Verification Status:</span>
+                        <span class="inline-flex items-center gap-1 text-emerald-700 font-bold">
+                            <i class="fa-solid fa-circle-check"></i> THOA Witness Verified
+                        </span>
+                    </div>
+                </div>
+
+                <p class="text-[11px] text-slate-500 text-center">
+                    Keep this digital donor card accessible and inform your next-of-kin.
+                </p>
+
+                <button onclick="closePledgeCardModal()" class="w-full py-2.5 rounded-xl bg-medical-teal text-white font-bold text-xs hover:bg-teal-800 transition">
+                    Done &amp; Return to Portal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Toast Notification Box (No window.alert used) -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- APPLICATION JAVASCRIPT -->
+    <script>
+        // =========================================================================
+        // 1. ABO / Rh BLOOD COMPATIBILITY RULES ENGINE
+        // =========================================================================
+        // Key = Blood Type; canReceiveFrom = list of donor blood types compatible with this recipient
+        const ABO_RULES = {
+            'O-':  { label: 'O Negative (Universal Donor)',     canDonateTo: ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'], canReceiveFrom: ['O-'] },
+            'O+':  { label: 'O Positive',                       canDonateTo: ['O+', 'A+', 'B+', 'AB+'],                         canReceiveFrom: ['O-', 'O+'] },
+            'A-':  { label: 'A Negative',                       canDonateTo: ['A-', 'A+', 'AB-', 'AB+'],                        canReceiveFrom: ['O-', 'A-'] },
+            'A+':  { label: 'A Positive',                       canDonateTo: ['A+', 'AB+'],                                     canReceiveFrom: ['O-', 'O+', 'A-', 'A+'] },
+            'B-':  { label: 'B Negative',                       canDonateTo: ['B-', 'B+', 'AB-', 'AB+'],                        canReceiveFrom: ['O-', 'B-'] },
+            'B+':  { label: 'B Positive',                       canDonateTo: ['B+', 'AB+'],                                     canReceiveFrom: ['O-', 'O+', 'B-', 'B+'] },
+            'AB-': { label: 'AB Negative',                      canDonateTo: ['AB-', 'AB+'],                                    canReceiveFrom: ['O-', 'A-', 'B-', 'AB-'] },
+            'AB+': { label: 'AB Positive (Universal Recipient)',canDonateTo: ['AB+'],                                           canReceiveFrom: ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'] }
+        };
+
+        const ALL_BLOOD_GROUPS = ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'];
+
+        // =========================================================================
+        // 2. PRE-POPULATED REALISTIC DONOR DIRECTORY (10 Verified Donors across India)
+        // =========================================================================
+        let donorsList = [
+            {
+                id: 'DNR-2026-101',
+                name: 'Aravind Swaminathan',
+                age: 29,
+                bloodGroup: 'O-',
+                organ: 'Kidney',
+                city: 'Chennai',
+                hospital: 'Apollo Transplant Institute, Greams Rd',
+                readiness: 'Living Donor (Scheduled)',
+                verified: true,
+                hlaScore: '6/6 Cross-Match Ready',
+                notes: 'Universal O- donor, cleared renal DTPA scan.'
+            },
+            {
+                id: 'DNR-2026-102',
+                name: 'Priya Darshini M.',
+                age: 34,
+                bloodGroup: 'A+',
+                organ: 'Liver',
+                city: 'Coimbatore',
+                hospital: 'PSG Super Speciality Hospitals',
+                readiness: 'Living Donor (Scheduled)',
+                verified: true,
+                hlaScore: 'Right Hepatic Lobe Viable',
+                notes: 'Voluntary living partial liver donor; hepatology cleared.'
+            },
+            {
+                id: 'DNR-2026-103',
+                name: 'Senthil Nathan K.',
+                age: 42,
+                bloodGroup: 'B+',
+                organ: 'Heart',
+                city: 'Madurai',
+                hospital: 'Meenakshi Mission Hospital & Research Centre',
+                readiness: 'Immediate (ICU / Ready)',
+                verified: true,
+                hlaScore: 'Green Corridor Standby (<4h)',
+                notes: 'TRANSTAN brain-stem death certified; family consent signed.'
+            },
+            {
+                id: 'DNR-2026-104',
+                name: 'Rohan Deshmukh',
+                age: 26,
+                bloodGroup: 'O+',
+                organ: 'Cornea',
+                city: 'Mumbai',
+                hospital: 'Kokilaben Dhirubhai Ambani Hospital',
+                readiness: 'Registered Pledge',
+                verified: true,
+                hlaScore: 'Eye Bank Pledge #MH-992',
+                notes: '20/20 endothelial cell density verified.'
+            },
+            {
+                id: 'DNR-2026-105',
+                name: 'Dr. Kavitha Rao',
+                age: 31,
+                bloodGroup: 'AB+',
+                organ: 'Kidney',
+                city: 'Bengaluru',
+                hospital: 'Manipal Hospital, Old Airport Rd',
+                readiness: 'Living Donor (Scheduled)',
+                verified: true,
+                hlaScore: '5/6 HLA Match Grade',
+                notes: 'Altruistic swap-registry donor.'
+            },
+            {
+                id: 'DNR-2026-106',
+                name: 'Syed Irfan Ali',
+                age: 38,
+                bloodGroup: 'B-',
+                organ: 'Lungs',
+                city: 'Hyderabad',
+                hospital: 'Yashoda Hospitals, Secunderabad',
+                readiness: 'Immediate (ICU / Ready)',
+                verified: true,
+                hlaScore: 'PaO2/FiO2 > 420 mmHg',
+                notes: 'Rare B- pulmonary donor; airlift charter available.'
+            },
+            {
+                id: 'DNR-2026-107',
+                name: 'Vikramaditya Sharma',
+                age: 24,
+                bloodGroup: 'A-',
+                organ: 'Bone Marrow',
+                city: 'Delhi',
+                hospital: 'AIIMS Organ Retrieval Banking Org (ORBO)',
+                readiness: 'Living Donor (Scheduled)',
+                verified: true,
+                hlaScore: '10/10 High-Res HLA Typed',
+                notes: 'Peripheral blood stem cell (PBSC) registry volunteer.'
+            },
+            {
+                id: 'DNR-2026-108',
+                name: 'Meenakshi Sundaram',
+                age: 45,
+                bloodGroup: 'O+',
+                organ: 'Pancreas',
+                city: 'Chennai',
+                hospital: 'MIOT International, Manapakkam',
+                readiness: 'Immediate (ICU / Ready)',
+                verified: true,
+                hlaScore: 'HbA1c 5.1% • Normal Amylase',
+                notes: 'Simultaneous Pancreas-Kidney (SPK) retrieval ready.'
+            },
+            {
+                id: 'DNR-2026-109',
+                name: 'Ananya Krishnan',
+                age: 22,
+                bloodGroup: 'AB-',
+                organ: 'Liver',
+                city: 'Bengaluru',
+                hospital: 'Narayana Health City, Bommasandra',
+                readiness: 'Registered Pledge',
+                verified: true,
+                hlaScore: 'Rare AB- Hepatic Donor',
+                notes: 'Registered with Jeevasarthakathe Karnataka.'
+            },
+            {
+                id: 'DNR-2026-110',
+                name: 'Harishankar V.',
+                age: 36,
+                bloodGroup: 'A+',
+                organ: 'Kidney',
+                city: 'Chennai',
+                hospital: 'Kauvery Hospital, Alwarpet',
+                readiness: 'Living Donor (Scheduled)',
+                verified: true,
+                hlaScore: 'Cross-Match Negative',
+                notes: 'Cleared nephrological and ethical committee review.'
+            }
+        ];
+
+        // =========================================================================
+        // 3. PRE-POPULATED URGENT RECIPIENT REQUESTS (5 Patients Across India)
+        // =========================================================================
+        let urgentRequests = [
+            {
+                reqId: 'REQ-901',
+                patientCode: 'Patient #TN-448 (52M)',
+                organNeeded: 'Heart',
+                bloodGroup: 'B+',
+                city: 'Chennai',
+                hospital: 'Apollo Transplant Institute, Chennai',
+                urgency: 'Critical',
+                waitDays: 19,
+                clinicalSummary: 'End-stage biventricular heart failure on LVAD support; requires immediate ABO-compatible cardiac donor (B+, B-, O+, O-).'
+            },
+            {
+                reqId: 'REQ-902',
+                patientCode: 'Patient #KA-119 (14F)',
+                organNeeded: 'Kidney',
+                bloodGroup: 'O-',
+                city: 'Bengaluru',
+                hospital: 'Manipal Hospital, Bengaluru',
+                urgency: 'Critical',
+                waitDays: 64,
+                clinicalSummary: 'Pediatric chronic renal failure on daily peritoneal dialysis; strictly requires O Negative donor.'
+            },
+            {
+                reqId: 'REQ-903',
+                patientCode: 'Patient #TN-712 (46M)',
+                organNeeded: 'Liver',
+                bloodGroup: 'A+',
+                city: 'Coimbatore',
+                hospital: 'PSG Hospitals, Coimbatore',
+                urgency: 'High',
+                waitDays: 38,
+                clinicalSummary: 'Decompensated cirrhosis (MELD Score 29); seeking living right-lobe donor or cadaveric liver.'
+            },
+            {
+                reqId: 'REQ-904',
+                patientCode: 'Patient #TS-305 (39F)',
+                organNeeded: 'Lungs',
+                bloodGroup: 'AB+',
+                city: 'Hyderabad',
+                hospital: 'Yashoda Hospitals, Hyderabad',
+                urgency: 'High',
+                waitDays: 27,
+                clinicalSummary: 'Idiopathic pulmonary fibrosis on high-flow oxygen; AB+ universal recipient compatible with any blood group.'
+            },
+            {
+                reqId: 'REQ-905',
+                patientCode: 'Patient #DL-608 (19M)',
+                organNeeded: 'Bone Marrow',
+                bloodGroup: 'A-',
+                city: 'Delhi',
+                hospital: 'AIIMS ORBO, New Delhi',
+                urgency: 'Moderate',
+                waitDays: 52,
+                clinicalSummary: 'Acute myeloid leukemia remission phase; awaiting HLA-matched peripheral stem cell donor.'
+            }
+        ];
+
+        let organsMatchedCounter = 142;
+
+        // Organ Icon Helper
+        function getOrganIcon(organ) {
+            const map = {
+                'Kidney': 'fa-kidneys',
+                'Liver': 'fa-droplet',
+                'Heart': 'fa-heart-pulse',
+                'Lungs': 'fa-lungs',
+                'Pancreas': 'fa-notes-medical',
+                'Cornea': 'fa-eye',
+                'Bone Marrow': 'fa-bone'
+            };
+            return map[organ] || 'fa-hand-holding-medical';
+        }
+
+        // =========================================================================
+        // 4. RENDER DONOR CARDS WITH SMART ABO COMPATIBILITY FILTERING
+        // =========================================================================
+        function renderDonorCards() {
+            const organFilter = document.getElementById('filter-organ').value;
+            const recipientBlood = document.getElementById('filter-blood').value;
+            const cityFilter = document.getElementById('filter-city').value;
+            const urgencyFilter = document.getElementById('filter-urgency').value;
+            const searchQuery = document.getElementById('filter-search').value.trim().toLowerCase();
+            const smartMode = document.getElementById('smart-compatibility-toggle').checked;
+
+            const helperText = document.getElementById('compatibility-helper-text');
+            if (recipientBlood !== 'ALL') {
+                const compatibleDonorTypes = smartMode
+                    ? ABO_RULES[recipientBlood].canReceiveFrom
+                    : [recipientBlood];
+                helperText.innerHTML = smartMode
+                    ? `Recipient <strong>${recipientBlood}</strong> can safely receive organs from donor types: <span class="font-bold text-teal-700">${compatibleDonorTypes.join(', ')}</span>`
+                    : `Strict Exact Match Mode: Showing only <strong>${recipientBlood}</strong> donors.`;
+            } else {
+                helperText.textContent = 'When enabled, selecting a Recipient Blood Group automatically displays all medically compatible donor blood types (e.g., O- universal donors).';
+            }
+
+            const filtered = donorsList.filter(donor => {
+                // Organ filter
+                if (organFilter !== 'ALL' && donor.organ !== organFilter) return false;
+
+                // Blood Group Filter (Exact vs Smart ABO Compatible)
+                if (recipientBlood !== 'ALL') {
+                    if (smartMode) {
+                        const allowedDonorBloods = ABO_RULES[recipientBlood].canReceiveFrom;
+                        if (!allowedDonorBloods.includes(donor.bloodGroup)) return false;
+                    } else {
+                        if (donor.bloodGroup !== recipientBlood) return false;
+                    }
+                }
+
+                // City Filter
+                if (cityFilter !== 'ALL' && donor.city !== cityFilter) return false;
+
+                // Readiness Filter
+                if (urgencyFilter !== 'ALL' && donor.readiness !== urgencyFilter) return false;
+
+                // Search Keyword Filter
+                if (searchQuery) {
+                    const haystack = `${donor.id} ${donor.name} ${donor.hospital} ${donor.city} ${donor.organ}`.toLowerCase();
+                    if (!haystack.includes(searchQuery)) return false;
+                }
+
+                return true;
+            });
+
+            const grid = document.getElementById('donor-cards-grid');
+            const emptyState = document.getElementById('donor-empty-state');
+            const countBadge = document.getElementById('results-count-badge');
+
+            countBadge.textContent = `Showing ${filtered.length} of ${donorsList.length} Verified Donors`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = filtered.map(donor => {
+                const isExactBlood = recipientBlood !== 'ALL' && donor.bloodGroup === recipientBlood;
+                const isCompatibleBlood = recipientBlood !== 'ALL' && donor.bloodGroup !== recipientBlood;
+
+                let matchBadgeHTML = '';
+                if (isExactBlood) {
+                    matchBadgeHTML = `<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[11px] font-bold border border-emerald-300"><i class="fa-solid fa-check-double mr-1"></i>Exact ABO Match</span>`;
+                } else if (isCompatibleBlood) {
+                    matchBadgeHTML = `<span class="px-2 py-0.5 rounded bg-teal-100 text-teal-800 text-[11px] font-bold border border-teal-300"><i class="fa-solid fa-shield-heart mr-1"></i>Compatible (${donor.bloodGroup} → ${recipientBlood})</span>`;
+                }
+
+                const readinessBadgeClass = donor.readiness.includes('Immediate')
+                    ? 'bg-rose-100 text-rose-800 border-rose-200'
+                    : donor.readiness.includes('Living')
+                        ? 'bg-teal-50 text-teal-800 border-teal-200'
+                        : 'bg-slate-100 text-slate-700 border-slate-200';
+
+                return `
+                <article class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col justify-between card-hover">
+                    <div>
+                        <!-- Top Row: Donor ID + Blood Badge -->
+                        <div class="flex items-start justify-between gap-2 mb-3">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-mono text-xs font-bold text-slate-500">${donor.id}</span>
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                        <i class="fa-solid fa-circle-check"></i> Verified
+                                    </span>
+                                </div>
+                                <h3 class="text-base font-extrabold text-slate-900 mt-1">${donor.name} <span class="text-xs font-medium text-slate-500">(${donor.age} yrs)</span></h3>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-rose-600 to-rose-700 text-white font-extrabold text-sm flex flex-col items-center justify-center shadow-sm shrink-0">
+                                <span>${donor.bloodGroup}</span>
+                                <span class="text-[9px] font-normal opacity-80">ABO</span>
+                            </div>
+                        </div>
+
+                        <!-- Organ & Compatibility Pill Strip -->
+                        <div class="flex flex-wrap items-center gap-1.5 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-extrabold bg-medical-teal text-white">
+                                <i class="fa-solid ${getOrganIcon(donor.organ)}"></i> ${donor.organ}
+                            </span>
+                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${readinessBadgeClass}">
+                                ${donor.readiness}
+                            </span>
+                            ${matchBadgeHTML}
+                        </div>
+
+                        <!-- Location & Hospital Metadata -->
+                        <div class="space-y-1.5 text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot text-teal-600 w-4 text-center"></i>
+                                <span><strong>City Hub:</strong> ${donor.city}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-hospital text-teal-600 w-4 text-center"></i>
+                                <span class="truncate" title="${donor.hospital}"><strong>Hospital:</strong> ${donor.hospital}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-vial text-teal-600 w-4 text-center"></i>
+                                <span><strong>Clinical Note:</strong> ${donor.hlaScore}</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-2.5 italic">"${donor.notes}"</p>
+                    </div>
+
+                    <!-- Card Footer CTA -->
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                        <span class="text-[11px] text-slate-400 flex items-center gap-1">
+                            <i class="fa-solid fa-user-shield text-teal-600"></i> Contact Masked
+                        </span>
+                        <button onclick="openMatchModal('DONOR', '${donor.id}')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-medical-teal hover:bg-teal-800 text-white transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-handshake-angle"></i> Request Match / Contact Hospital
+                        </button>
+                    </div>
+                </article>`;
+            }).join('');
+        }
+
+        function resetFinderFilters() {
+            document.getElementById('filter-organ').value = 'ALL';
+            document.getElementById('filter-blood').value = 'ALL';
+            document.getElementById('filter-city').value = 'ALL';
+            document.getElementById('filter-urgency').value = 'ALL';
+            document.getElementById('filter-search').value = '';
+            document.getElementById('smart-compatibility-toggle').checked = true;
+            renderDonorCards();
+            showToast('Filters reset. Showing all verified donors.', 'info');
+        }
+
+        // =========================================================================
+        // 5. RENDER URGENT RECIPIENT REQUESTS BOARD
+        // =========================================================================
+        function renderUrgentRequests() {
+            const container = document.getElementById('urgent-requests-grid');
+            container.innerHTML = urgentRequests.map(req => {
+                const badgeStyle = req.urgency === 'Critical'
+                    ? 'bg-rose-600 text-white'
+                    : req.urgency === 'High'
+                        ? 'bg-amber-500 text-white'
+                        : 'bg-sky-600 text-white';
+
+                const compatibleDonorsForReq = ABO_RULES[req.bloodGroup].canReceiveFrom.join(', ');
+
+                return `
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col justify-between card-hover relative overflow-hidden">
+                    <div class="absolute top-0 left-0 right-0 h-1.5 ${req.urgency === 'Critical' ? 'bg-rose-600' : req.urgency === 'High' ? 'bg-amber-500' : 'bg-sky-500'}"></div>
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-3 pt-1">
+                            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider ${badgeStyle}">
+                                ${req.urgency} Priority
+                            </span>
+                            <span class="font-mono text-xs font-bold text-slate-400">${req.reqId} • Wait: ${req.waitDays}d</span>
+                        </div>
+
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <h3 class="text-base font-extrabold text-slate-900">${req.patientCode}</h3>
+                                <p class="text-xs text-slate-500"><i class="fa-solid fa-hospital mr-1 text-teal-600"></i>${req.hospital}</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="inline-block px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 font-extrabold text-xs border border-rose-200">
+                                    Needs ${req.organNeeded} (${req.bloodGroup})
+                                </span>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100 leading-relaxed">
+                            ${req.clinicalSummary}
+                        </p>
+
+                        <div class="mt-2.5 text-[11px] text-teal-800 bg-teal-50/70 px-3 py-1.5 rounded-lg border border-teal-100">
+                            <strong>Compatible Donor Types:</strong> ${compatibleDonorsForReq}
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                        <button onclick="filterFinderForRecipient('${req.organNeeded}', '${req.bloodGroup}')" class="px-3 py-2 rounded-xl text-xs font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 transition">
+                            <i class="fa-solid fa-magnifying-glass mr-1"></i> Find Matching Donor
+                        </button>
+                        <button onclick="openMatchModal('RECIPIENT', '${req.reqId}')" class="px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-medical-crimson hover:bg-medical-crimsonDark transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-hand-holding-heart"></i> Offer Match / Pledge
+                        </button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // Jump from an Urgent Recipient card straight to the Finder with pre-filled filters
+        function filterFinderForRecipient(organ, bloodGroup) {
+            document.getElementById('filter-organ').value = organ;
+            document.getElementById('filter-blood').value = bloodGroup;
+            document.getElementById('filter-city').value = 'ALL';
+            document.getElementById('smart-compatibility-toggle').checked = true;
+            renderDonorCards();
+            document.getElementById('finder-section').scrollIntoView({ behavior: 'smooth' });
+            showToast(`Filtered directory for ${organ} donors compatible with ${bloodGroup}.`, 'success');
+        }
+
+        // =========================================================================
+        // 6. INTERACTIVE BLOOD COMPATIBILITY CHART & MATRIX
+        // =========================================================================
+        let currentHighlightedBlood = 'O-';
+
+        function selectBloodChart(bloodType) {
+            currentHighlightedBlood = bloodType;
+            const info = ABO_RULES[bloodType];
+
+            // Update button active styles
+            document.querySelectorAll('.abo-btn').forEach(btn => {
+                if (btn.getAttribute('data-bg') === bloodType) {
+                    btn.className = 'abo-btn py-2.5 rounded-xl font-extrabold text-sm border-2 transition bg-medical-teal text-white border-medical-teal shadow-sm';
+                } else {
+                    btn.className = 'abo-btn py-2.5 rounded-xl font-extrabold text-sm border-2 transition bg-slate-50 text-slate-700 border-slate-200 hover:border-teal-500';
+                }
+            });
+
+            document.getElementById('abo-selected-title').textContent = `${bloodType} • ${info.label}`;
+            document.getElementById('abo-selected-badge').textContent = bloodType;
+
+            document.getElementById('abo-can-donate').innerHTML = info.canDonateTo.map(bg =>
+                `<span class="px-2.5 py-1 rounded-lg bg-teal-600 text-white font-extrabold text-xs shadow-sm">${bg}</span>`
+            ).join('');
+
+            document.getElementById('abo-can-receive').innerHTML = info.canReceiveFrom.map(bg =>
+                `<span class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-extrabold text-xs shadow-sm">${bg}</span>`
+            ).join('');
+
+            renderCompatibilityMatrixTable();
+        }
+
+        function renderCompatibilityMatrixTable() {
+            const tbody = document.getElementById('compatibility-matrix-tbody');
+            tbody.innerHTML = ALL_BLOOD_GROUPS.map(recipientBg => {
+                const isRowSelected = recipientBg === currentHighlightedBlood;
+                const rowClass = isRowSelected ? 'bg-teal-50/90 font-bold ring-1 ring-teal-500' : 'hover:bg-slate-50';
+
+                const cells = ALL_BLOOD_GROUPS.map(donorBg => {
+                    const compatible = ABO_RULES[recipientBg].canReceiveFrom.includes(donorBg);
+                    if (compatible) {
+                        return `<td class="p-2 border border-slate-200">
+                            <span class="inline-flex w-6 h-6 rounded-md bg-emerald-100 text-emerald-700 items-center justify-center font-extrabold text-xs" title="Donor ${donorBg} can donate to Recipient ${recipientBg}">✓</span>
+                        </td>`;
+                    } else {
+                        return `<td class="p-2 border border-slate-200 text-slate-300">—</td>`;
+                    }
+                }).join('');
+
+                return `
+                <tr class="${rowClass} cursor-pointer transition" onclick="selectBloodChart('${recipientBg}')">
+                    <td class="p-2.5 text-left border border-slate-200 font-extrabold text-slate-800 bg-slate-100/70">
+                        ${recipientBg} ${isRowSelected ? '<span class="text-[10px] text-teal-700 ml-1">●</span>' : ''}
+                    </td>
+                    ${cells}
+                </tr>`;
+            }).join('');
+        }
+
+        // =========================================================================
+        // 7. HANDLE DYNAMIC DONOR REGISTRATION FORM SUBMISSION
+        // =========================================================================
+        function handleDonorRegistration(event) {
+            event.preventDefault();
+            const errorMsg = document.getElementById('form-error-msg');
+            errorMsg.classList.add('hidden');
+
+            const name = document.getElementById('reg-name').value.trim();
+            const age = parseInt(document.getElementById('reg-age').value, 10);
+            const bloodGroup = document.getElementById('reg-blood').value;
+            const city = document.getElementById('reg-city').value;
+            const hospital = document.getElementById('reg-hospital').value;
+            const readiness = document.getElementById('reg-readiness').value;
+            const notesInput = document.getElementById('reg-notes').value.trim();
+
+            const checkedOrgans = Array.from(document.querySelectorAll('input[name="pledge-organ"]:checked')).map(cb => cb.value);
+
+            if (checkedOrgans.length === 0) {
+                errorMsg.textContent = 'Please select at least one organ or tissue to pledge.';
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            // Create a new donor entry for each pledged organ so it appears immediately in the live directory
+            const baseIdNum = 100 + donorsList.length + 1;
+            let firstNewId = `DNR-2026-${baseIdNum}`;
+
+            checkedOrgans.forEach((organName, idx) => {
+                const newDonor = {
+                    id: `DNR-2026-${baseIdNum + idx}`,
+                    name: name,
+                    age: age,
+                    bloodGroup: bloodGroup,
+                    organ: organName,
+                    city: city,
+                    hospital: hospital,
+                    readiness: readiness,
+                    verified: true,
+                    hlaScore: 'Newly Registered Pledge • Nodal Verified',
+                    notes: notesInput || 'Voluntary THOA pledge registered via LifeLink Portal.'
+                };
+                donorsList.unshift(newDonor);
+            });
+
+            // Update Live Counters
+            document.getElementById('stat-total-donors').textContent = donorsList.length;
+
+            // Reset filters & re-render directory so user sees their card at the top
+            document.getElementById('filter-organ').value = 'ALL';
+            document.getElementById('filter-blood').value = 'ALL';
+            document.getElementById('filter-city').value = 'ALL';
+            document.getElementById('filter-urgency').value = 'ALL';
+            document.getElementById('filter-search').value = '';
+            renderDonorCards();
+
+            // Populate & Show Digital Donor Pledge Card Modal
+            document.getElementById('card-id').textContent = firstNewId;
+            document.getElementById('card-blood').textContent = bloodGroup;
+            document.getElementById('card-name').textContent = `${name} (${age} Yrs)`;
+            document.getElementById('card-organs').textContent = checkedOrgans.join(', ');
+            document.getElementById('card-hospital').textContent = `${city} • ${hospital.split(',')[0]}`;
+            document.getElementById('pledge-card-modal').classList.remove('hidden');
+
+            // Reset form
+            document.getElementById('donor-registration-form').reset();
+            showToast(`Pledge registered! Added ${checkedOrgans.length} organ listing(s) to live directory.`, 'success');
+        }
+
+        function openDemoPledgeModal() {
+            document.getElementById('card-id').textContent = 'DNR-2026-051';
+            document.getElementById('card-blood').textContent = 'O+';
+            document.getElementById('card-name').textContent = 'G.K. Viknesh (21 Yrs)';
+            document.getElementById('card-organs').textContent = 'Kidney, Liver, Cornea';
+            document.getElementById('card-hospital').textContent = 'Chennai • Apollo Transplant Institute';
+            document.getElementById('pledge-card-modal').classList.remove('hidden');
+        }
+
+        function closePledgeCardModal() {
+            document.getElementById('pledge-card-modal').classList.add('hidden');
+            document.getElementById('finder-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // =========================================================================
+        // 8. MODAL COORDINATION FOR HOSPITAL NODAL MATCH REQUESTS
+        // =========================================================================
+        function openMatchModal(mode, recordId) {
+            const summaryBox = document.getElementById('modal-summary-box');
+            const modalTitle = document.getElementById('modal-title');
+
+            if (mode === 'DONOR') {
+                const donor = donorsList.find(d => d.id === recordId);
+                if (!donor) return;
+                modalTitle.textContent = `Request Hospital Match • ${donor.id}`;
+                summaryBox.innerHTML = `
+                    <div class="flex justify-between">
+                        <span class="text-slate-500 font-semibold">Selected Donor:</span>
+                        <span class="font-bold text-slate-900">${donor.name} (${donor.age} yrs • ${donor.bloodGroup})</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500 font-semibold">Pledged Organ:</span>
+                        <span class="font-bold text-teal-700">${donor.organ} (${donor.readiness})</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500 font-semibold">Nodal Hospital:</span>
+                        <span class="font-medium text-slate-800">${donor.hospital}, ${donor.city}</span>
+                    </div>
+                `;
+            } else {
+                const req = urgentRequests.find(r => r.reqId === recordId);
+                if (!req) return;
+                modalTitle.textContent = `Offer Organ Match • ${req.reqId}`;
+                summaryBox.innerHTML = `
+                    <div class="flex justify-between">
+                        <span class="text-slate-500 font-semibold">Recipient Case:</span>
+                        <span class="font-bold text-slate-900">${req.patientCode} (${req.urgency} Priority)</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500 font-semibold">Required Organ &amp; ABO:</span>
+                        <span class="font-bold text-rose-600">${req.organNeeded} • Recipient Blood: ${req.bloodGroup}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500 font-semibold">Admitting Center:</span>
+                        <span class="font-medium text-slate-800">${req.hospital}</span>
+                    </div>
+                `;
+            }
+
+            document.getElementById('match-modal').classList.remove('hidden');
+        }
+
+        function closeMatchModal() {
+            document.getElementById('match-modal').classList.add('hidden');
+            document.getElementById('modal-request-form').reset();
+        }
+
+        function submitMatchCoordination(event) {
+            event.preventDefault();
+            const coordName = document.getElementById('coord-name').value.trim();
+            const license = document.getElementById('coord-license').value.trim();
+
+            organsMatchedCounter += 1;
+            document.getElementById('stat-organs-matched').textContent = organsMatchedCounter;
+
+            closeMatchModal();
+            showToast(`Nodal alert dispatched for ${coordName} (${license}). Live Organs Matched counter incremented!`, 'success');
+        }
+
+        // =========================================================================
+        // 9. TOAST NOTIFICATION HELPER
+        // =========================================================================
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' ? 'bg-medical-teal border-teal-400' : 'bg-slate-800 border-slate-600';
+            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl text-white text-xs font-semibold shadow-xl border ${bgClass} transition-all duration-300`;
+            toast.innerHTML = `
+                <i class="fa-solid ${type === 'success' ? 'fa-circle-check text-emerald-300' : 'fa-circle-info text-sky-300'} text-base"></i>
+                <span class="flex-1">${message}</span>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // Mobile Navigation Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Initialize Portal on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderDonorCards();
+            renderUrgentRequests();
+            selectBloodChart('O-');
+        });
+    </script>
+</body>
+</html>
